@@ -46,10 +46,7 @@ Here are common complaints I hear:
 Historically, when teams created test automation strategies, they would follow the "Testing Pyramid",
 which looked like this, from top to bottom:
 
-* UI tests
-* API tests
-* Component tests
-* Unit tests
+![Testing Pyramid](images/ch01/testing-pyramid.png)
 
 Tests at the bottom were considered "better" because they were closer to the code, easier to automate, and faster to execute.
 They were also considered to be less susceptible to flakiness and therefore easier to maintain.
