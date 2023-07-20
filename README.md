@@ -1,6 +1,6 @@
-# Pandy's Playwright Playground
+# Awesome Web Testing with Playwright
 
-This repository contains the [Automation Panda](https://automationpanda.com/)'s Official Playwright Tutorial!
+This repository contains the [Automation Panda](https://automationpanda.com/)'s official Playwright tutorial!
 
 In this tutorial, you will progressively create and build a new test automation project using Playwright in TypeScript.
 This GitHub repository provides all instructions for the tutorial.
