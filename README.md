@@ -22,13 +22,14 @@ You will need the following tools:
 Before starting this tutorial, create the new project using the following commands:
 
 ```
-mkdir pandy-playwright-tutorial
-cd pandy-playwright-tutorial
+mkdir awesome-playwright-tests
+cd awesome-playwright-tests
 npm init playwright@latest
 ```
 
 Choose the default options for each prompt.
 Choose YES to install the Playwright browsers.
+This tutorial was created with Playwright 1.36.1.
 
 *Warning:*
 **Complete these steps *before* taking this tutorial as part of a live session** (like at a conference or a webinar).
