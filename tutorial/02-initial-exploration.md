@@ -44,6 +44,10 @@ Beware that browser installation may take several minutes if your Internet conne
 This tutorial was developed with Playwright 1.36.1.
 Things might change in future versions.
 
+*Note:*
+If you are setting up an existing project that has Playwright as a dependency,
+then you will need to run `npm install` and then `npx playwright install` to install Playwright properly.
+
 
 ## Running the tests visually
 
