@@ -224,7 +224,7 @@ We can edit the code to be like this:
 ```
 
 After creating the new board,
-the app should display it on a new page with its name and an "Add a list" button:
+the app should display it on a new page with its name and an "Enter list title..." field:
 
 ![Trello new board page](images/ch03/trello-new-board.png)
 
