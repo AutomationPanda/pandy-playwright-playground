@@ -39,15 +39,16 @@ and you could fall behind if you are stuck waiting for slow downloads over WiFi.
 
 ## Tutorial Instructions
 
-There are seven chapters in total:
+There are eight chapters in total:
 
 1. Setting modern web testing goals
 2. Exploring Playwright's features
-3. Writing our own tests
-4. Refactoring interactions with page objects
-5. Implementing smarter setup
-6. Running tests with GitHub Actions
-7. Learning and practicing more
+3. Writing our first test
+4. Breaking down tests by behaviors
+5. Refactoring interactions with page objects
+6. Scaling tests with parallel execution
+7. Running tests with GitHub Actions
+8. Learning and practicing more
 
 Chapter-by-chapter tutorial instructions are provided under the `tutorial` folder.
 This repository also contains a branch for each chapter's example code.
