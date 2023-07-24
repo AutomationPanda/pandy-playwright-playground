@@ -121,45 +121,12 @@ We must refine the interactions and add assertions.
 Create a new file under the `tests` directory named `trello.spec.ts`.
 Copy the code from the recording window,
 and paste it into this new file.
+The generated code is essentially one giant block,
+so let's break it down into steps.
 
-The generated code is essentially one giant block. 
-Break it down into steps, like this:
 
-```typescript
-import { test, expect } from '@playwright/test';
+### Renaming the test
 
-test('test', async ({ page }) => {
-    
-    // Load the app
-    await page.goto('http://localhost:3000/');
-    
-    // Create a new board
-    await page.getByPlaceholder('Name of your first board').click();
-    await page.getByPlaceholder('Name of your first board').fill('Chores');
-    await page.getByPlaceholder('Name of your first board').press('Enter');
-
-    // Create a new list
-    await page.getByPlaceholder('Enter list title...').click();
-    await page.getByPlaceholder('Enter list title...').fill('TODO');
-    await page.getByPlaceholder('Enter list title...').press('Enter');
-
-    // Add cards to the list
-    await page.getByText('Add another card').click();
-    await page.getByPlaceholder('Enter a title for this card...').fill('Buy groceries');
-    await page.getByRole('button', { name: 'Add card' }).click();
-    await page.getByPlaceholder('Enter a title for this card...').click();
-    await page.getByPlaceholder('Enter a title for this card...').fill('Mow the lawn');
-    await page.getByRole('button', { name: 'Add card' }).click();
-    await page.getByPlaceholder('Enter a title for this card...').click();
-    await page.getByPlaceholder('Enter a title for this card...').fill('Walk the dog');
-    await page.getByRole('button', { name: 'Add card' }).click();
-    
-    // Navigate to the home page
-    await page.getByRole('navigation').getByRole('button').click();
-});
-```
-
-Let's start refining this code step by step.
 The entire test is part of a `test` function call:
 
 ```typescript
@@ -182,7 +149,10 @@ The function declares a `page` argument.
 This is a fixture that provides the Playwright `Page` object through which to make interactions.
 Behind the scenes, Playwright creates the browser, context, and page objects for you.
 
-Next, look at the first step to load the app:
+
+### Step 1: Load the app
+
+The first step loads the app:
 
 ```typescript
     // Load the app
@@ -194,7 +164,10 @@ Notice how it must be called with `await`.
 We could make some assertions here to verify that the page is loaded correctly,
 but for the sake of this test, we can consider that unnecessary.
 
-The following step creates a new board:
+
+### Step 2: Create a new board
+
+The second step creates a new board:
 
 ```typescript
     // Create a new board
@@ -249,6 +222,19 @@ We can edit the code to be like this:
     await page.getByPlaceholder('Name of your first board').fill('Chores');
     await page.getByPlaceholder('Name of your first board').press('Enter');
 ```
+
+
+### Step 3: Create a new list
+
+
+
+### Step 4: Add cards to the list
+
+
+
+### Step 5: Navigate to the home page
+
+
 
 
 ## Adding database prep
