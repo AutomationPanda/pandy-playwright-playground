@@ -1,4 +1,4 @@
-# Chapter 5: Refactoring interactions with page objects
+# Chapter 4: Refactoring interactions with page objects
 
 In this chapter,
 we will refactor interactions with page objects

@@ -1,4 +1,4 @@
-# Chapter 4: Breaking down tests by behaviors
+# Chapter 5: Breaking down tests by behaviors
 
 In this chapter,
 we will break down the test we wrote in the previous chapter
