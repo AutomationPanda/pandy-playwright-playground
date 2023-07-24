@@ -305,14 +305,129 @@ Playwright makes it easy to verify the text not just for one element but for a l
 
 ### Step 5: Navigate to the home page
 
+The final step to navigate back to the home page is a one-liner:
+
+```typescript
+    // Navigate to the home page
+    await page.getByRole('navigation').getByRole('button').click();
+```
+
+What makes it unique, however, is that it uses a chain of locators find the home button:
+`getByRole('navigation')` and then `getByRole('button')`.
+
+Like preceeding steps, this step should also have assertions.
+It should verify that the "My Boards" page is displayed and that it shows the new board:
+
+```typescript
+    await expect(page.getByText('My Boards')).toBeVisible();
+    await expect(page.getByText('Chores')).toBeVisible();
+```
 
 
+### Adding database prep
 
-## Adding database prep
+There is one more thing to address: database preparation.
+This test presumes that the app starts with an empty database.
+If the app has any boards already created,
+then the second step will fail because the app won't display the "Get Started!" page.
 
-?
+One simple solution is to clear the database before every test run.
+That way, the test always starts "fresh" with an empty database.
+This solution won't work when tests run in parallel,
+but we will address that in a later chapter.
+Let's keep things simple for now while we are learning the basics.
+
+Create a `test.beforeAll` hook,
+and inside it, call `POST /api/reset` to the app:
+
+```typescript
+test.beforeAll(async ({ request }) => {
+    // Clear the database
+    await request.post('http://localhost:3000/api/reset');
+});
+```
+
+*Note:*
+The Trello clone app stores all its data in a local JSON file
+located within the project at `backend/data/database.json`.
+You may manually reset the data at any time by reverting this file to its original version.
+
+
+### The completed test code
+
+We have finished refining the script we generated into a test case!
+Here's the full code:
+
+```typescript
+import { test, expect } from '@playwright/test';
+
+test.beforeAll(async ({ request }) => {
+
+    // Clear the database
+    await request.post('http://localhost:3000/api/reset');
+});
+
+test('Create a new board with a list and cards', async ({ page }) => {
+
+    // Load the app
+    await page.goto('http://localhost:3000/');
+    
+    // Create a new board
+    await page.getByPlaceholder('Name of your first board').fill('Chores');
+    await page.getByPlaceholder('Name of your first board').press('Enter');
+    await expect(page.locator('[name="board-title"]')).toHaveValue('Chores');
+    await expect(page.getByPlaceholder('Enter list title...')).toBeVisible();
+    await expect(page.locator('[data-cy="list"]')).not.toBeVisible();
+
+    // Create a new list
+    await page.getByPlaceholder('Enter list title...').fill('TODO');
+    await page.getByPlaceholder('Enter list title...').press('Enter');
+    await expect(page.locator('[data-cy="list-name"]')).toHaveValue('TODO');
+
+    // Add cards to the list
+    await page.getByText('Add another card').click();
+    await page.getByPlaceholder('Enter a title for this card...').fill('Buy groceries');
+    await page.getByRole('button', { name: 'Add card' }).click();
+    await page.getByPlaceholder('Enter a title for this card...').fill('Mow the lawn');
+    await page.getByRole('button', { name: 'Add card' }).click();
+    await page.getByPlaceholder('Enter a title for this card...').fill('Walk the dog');
+    await page.getByRole('button', { name: 'Add card' }).click();
+    await expect(page.locator('[data-cy="card-text"]')).toHaveText(
+        ['Buy groceries', 'Mow the lawn', 'Walk the dog']);
+    
+    // Navigate to the home page
+    await page.getByRole('navigation').getByRole('button').click();
+    await expect(page.getByText('My Boards')).toBeVisible();
+    await expect(page.getByText('Chores')).toBeVisible();
+});
+```
 
 
 ## Running the test (carefully)
 
-?
+Let's run this test from UI mode:
+
+```
+npx playwright test --ui
+```
+
+Find the Trello test in the left sidebar, and click the play button.
+The test should run and pass!
+You can even inspect the Before Hooks to verify that the test reset the database beforehand:
+
+![UI mode with the database reset request](images/ch03/ui-mode-with-request.png)
+
+UI mode provides a wealth of information such as trace and screenshots,
+so it is very helpful to use while developing and debugging test code.
+It also runs tests "safely" one at a time,
+rather than running them in parallel across multiple workers.
+
+If you want to run this test from the command line, be careful.
+Our test data management strategy would not work if we run multiple tests in parallel.
+For now, we need to limit our test execution to one worker:
+
+```
+npx playwright test tests/trello.spec.ts --workers 1
+```
+
+We will fix this later in the tutorial.

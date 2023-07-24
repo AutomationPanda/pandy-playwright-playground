@@ -1,5 +1,11 @@
 import { test, expect } from '@playwright/test';
 
+test.beforeAll(async ({ request }) => {
+
+    // Clear the database
+    await request.post('http://localhost:3000/api/reset');
+});
+
 test('Create a new board with a list and cards', async ({ page }) => {
 
     // Load the app
@@ -30,4 +36,6 @@ test('Create a new board with a list and cards', async ({ page }) => {
     
     // Navigate to the home page
     await page.getByRole('navigation').getByRole('button').click();
+    await expect(page.getByText('My Boards')).toBeVisible();
+    await expect(page.getByText('Chores')).toBeVisible();
 });
