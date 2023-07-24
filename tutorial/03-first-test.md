@@ -259,7 +259,9 @@ The next step creates the first list on the board:
 The interactions are very similar to the previous step.
 Again, the `click` interaction is unnecessary, so we can remove it.
 We should also add assertions to make sure the list was actually created.
-Try to inspect the page and come up with your own assertions.
+Try to inspect the page and come up with your own assertions:
+
+![Trello board first list](images/ch03/trello-first-list.png)
 
 The updated code should look something like this:
 
@@ -273,6 +275,32 @@ The updated code should look something like this:
 
 ### Step 4: Add cards to the list
 
+The next step adds three cards to the list that was just created:
+
+```typescript
+    // Add cards to the list
+    await page.getByText('Add another card').click();
+    await page.getByPlaceholder('Enter a title for this card...').fill('Buy groceries');
+    await page.getByRole('button', { name: 'Add card' }).click();
+    await page.getByPlaceholder('Enter a title for this card...').click();
+    await page.getByPlaceholder('Enter a title for this card...').fill('Mow the lawn');
+    await page.getByRole('button', { name: 'Add card' }).click();
+    await page.getByPlaceholder('Enter a title for this card...').click();
+    await page.getByPlaceholder('Enter a title for this card...').fill('Walk the dog');
+    await page.getByRole('button', { name: 'Add card' }).click();
+```
+
+In this step, the first click on "Add another card" is important
+because the "Enter a title for this card..." input does not appear otherwise.
+However, the subsequent clicks on "Enter a title for this card..." are not necessary.
+
+Assertions should verify that the three cards appear.
+Playwright makes it easy to verify the text not just for one element but for a list of elements:
+
+```typescript
+    await expect(page.locator('[data-cy="card-text"]')).toHaveText(
+        ['Buy groceries', 'Mow the lawn', 'Walk the dog']);
+```
 
 
 ### Step 5: Navigate to the home page
