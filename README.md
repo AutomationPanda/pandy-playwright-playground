@@ -44,8 +44,8 @@ There are eight chapters in total:
 1. Setting modern web testing goals
 2. Exploring Playwright's features
 3. Writing our first test
-4. Breaking down tests by behaviors
-5. Refactoring interactions with page objects
+4. Refactoring interactions with page objects
+5. Breaking down tests by behaviors
 6. Scaling tests with parallel execution
 7. Running tests with GitHub Actions
 8. Learning and practicing more
