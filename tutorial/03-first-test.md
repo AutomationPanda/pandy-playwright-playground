@@ -223,6 +223,27 @@ We can edit the code to be like this:
     await page.getByPlaceholder('Name of your first board').press('Enter');
 ```
 
+After creating the new board,
+the app should display it on a new page with its name and an "Add a list" button:
+
+![Trello new board page](images/ch03/trello-new-board.png)
+
+The test should verify that this page appears as expected.
+Add the following assertions:
+
+```typescript
+    await expect(page.locator('[name="board-title"]')).toHaveValue('Chores');
+    await expect(page.getByPlaceholder('Enter list title...')).toBeVisible();
+    await expect(page.locator('[data-cy="list"]')).not.toBeVisible();
+```
+
+These assertions will make sure the new board page opens correctly.
+
+* Since the board title element is an `input`,
+  the first assertion must use `toHaveValue` instead of `toHaveText`.
+* The second assertion verifies that the field for adding a new list is visible.
+* The third assertion verifies that the board does not have any lists created.
+
 
 ### Step 3: Create a new list
 

@@ -9,6 +9,9 @@ test('Create a new board with a list and cards', async ({ page }) => {
     await page.getByPlaceholder('Name of your first board').click();
     await page.getByPlaceholder('Name of your first board').fill('Chores');
     await page.getByPlaceholder('Name of your first board').press('Enter');
+    await expect(page.locator('[name="board-title"]')).toHaveValue('Chores');
+    await expect(page.getByPlaceholder('Enter list title...')).toBeVisible();
+    await expect(page.locator('[data-cy="list"]')).not.toBeVisible();
 
     // Create a new list
     await page.getByPlaceholder('Enter list title...').click();
