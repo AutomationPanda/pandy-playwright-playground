@@ -229,7 +229,7 @@ the app should display it on a new page with its name and an "Add a list" button
 ![Trello new board page](images/ch03/trello-new-board.png)
 
 The test should verify that this page appears as expected.
-Add the following assertions:
+Add the following [assertions](https://playwright.dev/docs/test-assertions):
 
 ```typescript
     await expect(page.locator('[name="board-title"]')).toHaveValue('Chores');
@@ -247,6 +247,28 @@ These assertions will make sure the new board page opens correctly.
 
 ### Step 3: Create a new list
 
+The next step creates the first list on the board:
+
+```typescript
+    // Create a new list
+    await page.getByPlaceholder('Enter list title...').click();
+    await page.getByPlaceholder('Enter list title...').fill('TODO');
+    await page.getByPlaceholder('Enter list title...').press('Enter');
+```
+
+The interactions are very similar to the previous step.
+Again, the `click` interaction is unnecessary, so we can remove it.
+We should also add assertions to make sure the list was actually created.
+Try to inspect the page and come up with your own assertions.
+
+The updated code should look something like this:
+
+```typescript
+    // Create a new list
+    await page.getByPlaceholder('Enter list title...').fill('TODO');
+    await page.getByPlaceholder('Enter list title...').press('Enter');
+    await expect(page.locator('[data-cy="list-name"]')).toHaveValue('TODO');
+```
 
 
 ### Step 4: Add cards to the list
