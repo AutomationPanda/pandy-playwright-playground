@@ -224,5 +224,16 @@ The main benefit is that each unique behavior is tested and reported independent
 
 ## Optimizing setup steps
 
-?
+One of the best ways to optimize end-to-end testing is to use API calls to set up data for a test.
+API interactions are much faster and less susceptible to flakiness than UI interactions.
+For example, we could use an API call to create a new board before each test
+instead of relying on the UI interaction to enter text and press the ENTER key.
+We already use an API call to reset the database before each test.
 
+There are some tradeoffs to consider with this approach:
+
+* API calls may be more complicated to write than UI interactions.
+* API calls may not save time over UI interactions in all cases.
+* API calls should be used for setup and cleanup, *not* for the main behaviors.
+
+Use your best judgment when and where to try to optimize test setup and cleanup with API calls.
