@@ -40,10 +40,9 @@
 //     await expect(page.getByText('Chores')).toBeVisible();
 // });
 
-import { test, expect } from '@playwright/test';
-import { GetStartedPage } from './pages/get-started';
-import { BoardPage } from './pages/board';
-import { MyBoardsPage } from './pages/my-boards';
+
+
+import { test, expect } from './fixtures/trello-test';
 
 test.beforeAll(async ({ request }) => {
 
@@ -51,12 +50,8 @@ test.beforeAll(async ({ request }) => {
     await request.post('http://localhost:3000/api/reset');
 });
 
-test('Create a new board with a list and cards', async ({ page }) => {
-
-    // Create page objects
-    const getStartedPage = new GetStartedPage(page);
-    const boardPage = new BoardPage(page);
-    const myBoardsPage = new MyBoardsPage(page);
+test('Create a new board with a list and cards', async (
+    { getStartedPage, boardPage, myBoardsPage }) => {
 
     // Load the app
     await getStartedPage.load();

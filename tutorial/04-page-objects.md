@@ -311,7 +311,7 @@ This code is much more concise than before!
 Future tests can use these page objects as well.
 
 
-## Rerunning the tests
+### Rerunning the tests
 
 Rerun the test using either UI mode:
 
@@ -329,12 +329,112 @@ Functionally, the test has not changed.
 It should still pass.
 
 
-## Optional: Creating fixtures for page objects
+## Creating page object fixtures
 
 Constructing page objects in every test function becomes duplicative.
 A great way to avoid this duplication is to create a
 [fixture](https://playwright.dev/docs/test-fixtures) for each page object class.
 Then, each test can receive a reference to any object it declares,
 just like the `page` object used for making Playwright interactions.
-Follow the [Fixtures](https://playwright.dev/docs/test-fixtures) guide in the Playwright docs
-to refactor this test code using fixtures for each page object.
+
+To create a fixture, we need to override the base `test` object.
+Create a new folder under `tests` named `fixtures`,
+and create a new file named `trello-test.ts` in it.
+Add the following code:
+
+```typescript
+import { test as base } from '@playwright/test';
+import { GetStartedPage } from '../pages/get-started';
+import { BoardPage } from '../pages/board';
+import { MyBoardsPage } from '../pages/my-boards';
+
+type TrelloFixtures = {
+  getStartedPage: GetStartedPage;
+  boardPage: BoardPage;
+  myBoardsPage: MyBoardsPage;
+};
+
+export const test = base.extend<TrelloFixtures>({
+
+  getStartedPage: async ({ page }, use) => {
+    await use(new GetStartedPage(page));
+  },
+
+  boardPage: async ({ page }, use) => {
+    await use(new BoardPage(page));
+  },
+
+  myBoardsPage: async ({ page }, use) => {
+    await use(new MyBoardsPage(page));
+  },
+});
+
+export { expect } from '@playwright/test';
+```
+
+The extended `test` object now has a fixture for each page object.
+Each fixture simply constructs the page object and returns it.
+Fixtures could also have setup and cleanup steps if desired.
+
+Next, update the test code in `trello.spec.ts`.
+The imports become more concise:
+
+```typescript
+// import { test, expect } from '@playwright/test';
+// import { GetStartedPage } from './pages/get-started';
+// import { BoardPage } from './pages/board';
+// import { MyBoardsPage } from './pages/my-boards';
+
+import { test, expect } from './fixtures/trello-test';
+```
+
+The test signature needs to declare the fixtures:
+
+```typescript
+// test('Create a new board with a list and cards', async ({ page }) => {
+
+test('Create a new board with a list and cards', async (
+    { getStartedPage, boardPage, myBoardsPage }) => {
+```
+
+The page object constructions at the top of the test case should also be removed.
+The final code should look like this:
+
+```typescript
+import { test, expect } from './fixtures/trello-test';
+
+test.beforeAll(async ({ request }) => {
+
+    // Clear the database
+    await request.post('http://localhost:3000/api/reset');
+});
+
+test('Create a new board with a list and cards', async (
+    { getStartedPage, boardPage, myBoardsPage }) => {
+
+    // Load the app
+    await getStartedPage.load();
+    
+    // Create a new board
+    await getStartedPage.createFirstBoard('Chores');
+    await boardPage.expectNewBoardLoaded('Chores');
+
+    // Create a new list
+    await boardPage.addList('TODO');
+    await expect(boardPage.listName).toHaveValue('TODO');
+
+    // Add cards to the list
+    await boardPage.addCardToList(0, 'Buy groceries');
+    await boardPage.addCardToList(0, 'Mow the lawn');
+    await boardPage.addCardToList(0, 'Walk the dog');
+    await expect(boardPage.cardTexts).toHaveText(
+        ['Buy groceries', 'Mow the lawn', 'Walk the dog']);
+    
+    // Navigate to the home page
+    await boardPage.goHome();
+    await myBoardsPage.expectLoaded(['Chores']);
+});
+```
+
+That's a little cleaner, and the page objects are even easier to use now.
+Rerun the test again to make sure everything works.
