@@ -327,3 +327,15 @@ npx playwright test tests/trello.spec.ts --workers 1
 
 Functionally, the test has not changed.
 It should still pass.
+
+
+## Optional: Creating fixtures for page objects
+
+Constructing page objects in every test function becomes duplicative.
+A great way to avoid this duplication is to create a
+[fixture](https://playwright.dev/docs/test-fixtures) for each page object class.
+Then, each test can receive a reference to any object it declares,
+just like the `page` object used for making Playwright interactions.
+
+Follow the [Fixtures](https://playwright.dev/docs/test-fixtures) guide in the Playwright docs
+to refactor this test code using fixtures for each page object.
