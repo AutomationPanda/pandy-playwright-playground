@@ -264,9 +264,66 @@ It verifies that "My Boards" and each expected board name appears by text.
 
 ## Rewriting test case code
 
-?
+Let's rewrite the test case code using these new page objects.
+In `trello.spec.ts`, add import statements for the page objects:
+
+```typescript
+import { GetStartedPage } from './pages/get-started';
+import { BoardPage } from './pages/board';
+import { MyBoardsPage } from './pages/my-boards';
+```
+
+Inside the test function, construct each page object:
+
+```typescript
+    const getStartedPage = new GetStartedPage(page);
+    const boardPage = new BoardPage(page);
+    const myBoardsPage = new MyBoardsPage(page);
+```
+
+Then, rewrite the steps:
+
+```typescript
+    // Load the app
+    await getStartedPage.load();
+    
+    // Create a new board
+    await getStartedPage.createFirstBoard('Chores');
+    await boardPage.expectNewBoardLoaded('Chores');
+
+    // Create a new list
+    await boardPage.addList('TODO');
+    await expect(boardPage.listName).toHaveValue('TODO');
+
+    // Add cards to the list
+    await boardPage.addCardToList(0, 'Buy groceries');
+    await boardPage.addCardToList(0, 'Mow the lawn');
+    await boardPage.addCardToList(0, 'Walk the dog');
+    await expect(boardPage.cardTexts).toHaveText(
+        ['Buy groceries', 'Mow the lawn', 'Walk the dog']);
+    
+    // Navigate to the home page
+    await boardPage.goHome();
+    await myBoardsPage.expectLoaded(['Chores']);
+```
+
+This code is much more concise than before!
+Future tests can use these page objects as well.
 
 
 ## Rerunning the tests
 
-?
+Rerun the test using either UI mode:
+
+```
+npx playwright test --ui
+```
+
+Or the command line:
+
+```
+npx playwright test tests/trello.spec.ts --workers 1
+```
+
+Functionally, the test has not changed.
+It should still pass.
