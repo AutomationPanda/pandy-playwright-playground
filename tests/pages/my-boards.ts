@@ -9,6 +9,14 @@ export class MyBoardsPage {
     this.myBoardsTitle = page.getByText('My Boards');
   }
 
+  async load() {
+    await this.page.goto('http://localhost:3000/');
+  }
+
+  async openBoard(boardName: string) {
+    await this.page.getByText(boardName).click();
+  }
+
   async expectLoaded(boardNames: string[]) {
     await expect(this.myBoardsTitle).toBeVisible();
 
