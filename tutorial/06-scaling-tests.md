@@ -154,7 +154,26 @@ Let's change it to `'should display the new board'`:
     });
 ```
 
+In theory, we could also delete the `tests/pages/get-started.ts` file
+and remove it from `tests/fixtures/trello-test.ts` since it is no longer used.
+
 
 ## Running the tests at scale
 
-?
+Rerun the tests in parallel with the updated code:
+
+```
+npx playwright test tests/trello.spec.ts
+```
+
+Not only will Playwright tests across multiple workers,
+it will also run tests across all three browsers (Chromium, Firefox, and WebKit).
+
+When running tests in parallel, watch out for strange, intermittent failures.
+Those indicate when collisions are happening.
+
+Another factor to consider is database cleanup.
+With the data strategy we chose, tests will continue to add more and more boards.
+Eventually, the database should be reset,
+or else it could cripple the app or the machine running the app.
+Database reset should be done every so often outside of the test automation code.
