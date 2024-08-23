@@ -47,6 +47,37 @@ export default defineConfig({
       use: { ...devices['Desktop Safari'] },
     },
 
+    {
+      name: "chrome:latest:MacOS Ventura@lambdatest",
+      use: {
+        viewport: { width: 1920, height: 1080 },
+      },
+    },
+    {
+      name: "chrome:latest:Windows 11@lambdatest",
+      use: {
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+    {
+      name: "MicrosoftEdge:latest:MacOS Ventura@lambdatest",
+      use: {
+        ...devices["iPhone 12 Pro Max"],
+      },
+    },
+    {
+      name: "pw-firefox:latest:Windows 11@lambdatest",
+      use: {
+        viewport: { width: 1280, height: 720 },
+      },
+    },
+    {
+      name: "pw-webkit:latest:Windows 10@lambdatest",
+      use: {
+        viewport: { width: 1920, height: 1080 },
+      },
+    },
+    
     /* Test against mobile viewports. */
     // {
     //   name: 'Mobile Chrome',
